@@ -160,7 +160,100 @@ exprome/
 
 ---
 
-## 6. What's left
+## 6. Outpost workstream
 
-- **Outpost data + tab** — entire workstream deferred until the user collects outpost upgrade names, branches (medical/housing/etc.), prereqs (OR semantics), and the 4-resource cost per node.
+User supplied the full per-node spec in `outpost_nodes.md` (27 nodes: 3 roots + 24 buildings, organised into 9 building groups × 3 tiers each, with costs in the 4 named resources and an unlock graph with OR semantics on parents).
+
+### 6.1 Topology mapping
+
+Before coding I drafted a numbered SVG topology (`reference/outpost-topology-draft.svg`) to verify I understood the node positions and edges from the in-game screenshot. User confirmed the node count (24 tree + 3 roots = 27) and flagged a duplicate centre node (I'd drawn 7 and 20 stacked when they were the same single junction) plus a missing corner node. Layout was refined; user ultimately said paths were still wrong but supplied the canonical edges in the data file, so I dropped the SVG-driven layout and used the per-node `unlockedBy` arrays as the source of truth for edges.
+
+### 6.2 Data pipeline (`src/data/outpost.json`)
+
+Hand-authored from `outpost_nodes.md`. Each node carries:
+
+- `id` (`R1`–`R3` for roots, `1`–`24` for buildings)
+- `name`, `description`, `group`, `tier` (1/2/3), `isRoot`
+- `unlockedBy[]` — OR semantics; any one built parent unlocks the child
+- `cost` — partial record of `lumber` / `food` / `leather` / `iron` (full game names: Lumber Mill, Farm, Tannery, Iron Mine — user explicitly forbade short names in any user-facing label)
+- `x`, `y` — position on the SVG canvas, picked to roughly match the in-game layout
+
+### 6.3 Rules engine (`src/lib/outpost-rules.ts`)
+
+Pure functions:
+- `canBuild`: requires (a) ≥1 unlock-parent built/planned (OR) AND (b) the previous tier of the same building group built/planned. Roots are always considered built.
+- `canUnbuild`: blocks the transition back to `none` if any dependent (unlock-child or higher tier in same group) would be left orphaned. Smart enough to allow refunds when the child still has another built parent.
+- `plannedCostTotal` / `totalInvested`: sum costs across `planned` and `planned+owned` nodes respectively.
+- `nextLegalStatus`: drives the tri-state click cycle (`none → planned → owned → none`) and reports the legality check for the desired transition.
+
+### 6.4 UI (`src/lib/outpost/*.svelte`)
+
+- **OutpostTab** — owns the SVG canvas, edge computation, and the resource totals bar. Layout matches the in-game screenshot (viewBox `40 150 1230 830`). Resource totals show as `<Building name>: <count>` (no short names).
+- **OutpostNodeView** — one `<g>` per node with the circle, the building-group icon, the tier badge (I/II/III), and mouseenter/leave dispatch for the parent tooltip.
+- **OutpostGroupIcon** — nine inline SVG glyphs (plus, coins, tent, grenade, anvil, aqueduct, brick wall, cards, shelves) keyed by group. Replaced the original numeric labels after user noted the numbers conveyed nothing.
+- **OutpostTooltip** — single positioned HTML tooltip rendered by the parent, anchored to the hovered node's screen rect. Same 80ms-delay pattern as the party tooltip.
+- **OutpostDetailCard** — mobile/tablet bottom-sheet with explicit Not Built / Planned / Owned buttons (since hover doesn't exist on touch).
+
+### 6.5 Post-launch refinements
+
+User-driven iterations after the first outpost deploy:
+
+- **Tooltips made fast.** Initial outpost render used SVG `<title>` (browser-native, ~500ms delay). Replaced with the custom 80ms HTML tooltip pattern shipped on the party side, dispatched from each node's `mouseenter` so the parent can position it.
+- **Numbers → icons.** Per-node id numbers were arbitrary and meaningless to users. Replaced with simple inline-SVG glyphs per building group.
+- **Edge trimming.** Originally lines drew from circle centre to circle centre, visually piercing the icons. Added a small `trim()` helper that shortens each edge by `radius + 2px` on both ends so lines stop at the circle border. Same trim applied to the root spine, split into two segments instead of one through-line.
+- **Tier-progression dashed edges removed.** Initially I drew cross-canvas dashed edges between same-group nodes to visualise the tier rule. These cut through unrelated circles' icons and added clutter. Tier is already conveyed by the I/II/III badge under each node — dashed lines deleted.
+- **Roots no longer colour-coded.** Originally rendered R1/R2/R3 with per-group tints (red/bronze/olive). User pointed out they ARE built from the start — they should just look like any other built (gold/owned) node. Single uniform style now.
+
+---
+
+## 7. Export / import (final feature)
+
+Build sharing via a single copyable string, no file download.
+
+- **Format**: `exprome:` + base64(JSON). JSON contains version tag, build name, PC, loyals map, praetorians array, and outpost status map. Version-tagged so future schema changes can either migrate or refuse cleanly.
+- **Encoding**: TextEncoder → binary string → `btoa`, with the reverse on decode. Handles non-ASCII names (Caeso, Verginia, etc.) correctly — naive `btoa(JSON.stringify(...))` would throw on high-codepoint characters.
+- **Export modal**: read-only textarea pre-selected on open, one-click Copy to clipboard (falls back to manual select if `navigator.clipboard` is blocked).
+- **Import modal**: paste target, Import button adds the result as a *new* build named `"<original> (imported)"`. Existing builds stay untouched. Clear error message if the prefix is missing, the base64 is corrupt, or the schema version doesn't match.
+- Round-trips: PC class+name+skills, every loyal's ranks, every praetorian (custom name+class+skills), full outpost tri-state map. Smoke-tested.
+
+Wired into the build manager header alongside Rename / New / Copy / Delete.
+
+---
+
+## 8. Repo layout (final)
+
+```
+exprome/
+├── PLAN.md, progress.md, scraped_skills.md, outpost_nodes.md
+├── package.json, vite.config.ts, tsconfig.json, svelte.config.js
+├── index.html
+├── .github/workflows/deploy.yml   ← GH Pages build + deploy
+├── .gitignore
+├── public/favicon.svg
+├── reference/                     ← in-game screenshots + topology draft
+├── screenshots/                   ← smoke-test output (gitignored)
+├── scripts/
+│   ├── parse-skills.ts            ← markdown → skills.json
+│   └── smoke-test.mjs             ← Playwright UI probe
+└── src/
+    ├── main.ts, App.svelte, app.css
+    ├── data/
+    │   ├── skills.json            ← generated, 96 entries
+    │   ├── loyals.json            ← 5 canonical loyals
+    │   └── outpost.json           ← 27 outpost nodes
+    └── lib/
+        ├── types.ts               ← shared TS types + constants
+        ├── rules.ts               ← party rules engine
+        ├── outpost-rules.ts       ← outpost rules engine
+        ├── state/builds.ts        ← Svelte store + localStorage + export/import
+        ├── ExportImportModal.svelte
+        ├── party/                 ← party UI
+        └── outpost/               ← outpost UI
+```
+
+---
+
+## 9. What's left
+
 - **DLC** — explicitly not planned for.
+- That's it. Both halves shipped, all user requests addressed.
