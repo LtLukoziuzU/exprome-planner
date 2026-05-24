@@ -71,6 +71,24 @@ await page.locator('[aria-label="Bath"]').first().hover();
 await page.waitForTimeout(300);
 await page.screenshot({ path: resolve(OUT, 'desktop-outpost-tooltip.png'), fullPage: false });
 
+// Export / import round-trip.
+await page.getByRole('button', { name: 'Export' }).click();
+await page.waitForTimeout(200);
+const exported = await page.locator('textarea').inputValue();
+console.log('Exported length:', exported.length, 'starts:', exported.slice(0, 40));
+await page.getByRole('button', { name: 'Close', exact: true }).first().click();
+await page.waitForTimeout(100);
+
+// Now import the same string — should add a new build.
+await page.getByRole('button', { name: 'Import' }).click();
+await page.waitForTimeout(150);
+await page.locator('textarea').fill(exported);
+await page.locator('button.primary').click(); // the Import button inside the modal
+await page.waitForTimeout(200);
+const buildOptions = await page.locator('select option').allTextContents();
+console.log('Build dropdown after import:', buildOptions);
+await page.screenshot({ path: resolve(OUT, 'desktop-after-import.png'), fullPage: false });
+
 console.log(`Console errors: ${errors.length ? errors.join('\n  ') : 'none'}`);
 console.log(`Screenshots written to ${OUT}`);
 

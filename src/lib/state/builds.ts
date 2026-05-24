@@ -177,3 +177,89 @@ export const removePraetorian = (id: string): void => {
 };
 
 export const loyalRoster: LoyalCompanion[] = LOYALS;
+
+// ── Export / Import ─────────────────────────────────────────────────────────
+// Encode a build to a copyable string. We deliberately omit id/createdAt/
+// updatedAt — those get regenerated on import so the imported copy is its own
+// distinct build. Format is base64(JSON), prefixed with a version tag so we
+// can evolve the schema later without silently breaking older payloads.
+
+const EXPORT_VERSION = 1;
+const EXPORT_PREFIX = 'exprome:';
+
+interface ExportPayload {
+  v: number;
+  name: string;
+  pc: CharacterState;
+  loyals: Record<string, CharacterState>;
+  praetorians: PraetorianState[];
+  outpost: { status: Record<string, 'planned' | 'owned'> };
+}
+
+const b64encode = (s: string): string => {
+  // btoa requires Latin-1 — round-trip through TextEncoder + binary mapping
+  // so non-ASCII names (Caeso, Verginia, etc.) survive.
+  const bytes = new TextEncoder().encode(s);
+  let bin = '';
+  for (const b of bytes) bin += String.fromCharCode(b);
+  return btoa(bin);
+};
+const b64decode = (s: string): string => {
+  const bin = atob(s);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+};
+
+export const exportActiveBuild = (): string | null => {
+  const s = get(store);
+  const b = s.builds.find((x) => x.id === s.activeBuildId);
+  if (!b) return null;
+  const payload: ExportPayload = {
+    v: EXPORT_VERSION,
+    name: b.name,
+    pc: b.pc,
+    loyals: b.loyals,
+    praetorians: b.praetorians,
+    outpost: (b.outpost ?? { status: {} }) as ExportPayload['outpost'],
+  };
+  return EXPORT_PREFIX + b64encode(JSON.stringify(payload));
+};
+
+/** Import a build from an exported string. Returns the new build id on
+ *  success, or an error message on failure. The new build is added and
+ *  becomes active. */
+export const importBuild = (encoded: string): { ok: true; id: string } | { ok: false; reason: string } => {
+  const raw = encoded.trim();
+  if (!raw.startsWith(EXPORT_PREFIX)) {
+    return { ok: false, reason: 'Not a valid exprome build string (missing prefix).' };
+  }
+  let payload: ExportPayload;
+  try {
+    payload = JSON.parse(b64decode(raw.slice(EXPORT_PREFIX.length)));
+  } catch {
+    return { ok: false, reason: 'Could not decode build — string is corrupted or truncated.' };
+  }
+  if (payload.v !== EXPORT_VERSION) {
+    return { ok: false, reason: `Unsupported build version ${payload.v} (expected ${EXPORT_VERSION}).` };
+  }
+  if (!payload.pc || typeof payload.pc.classId !== 'string') {
+    return { ok: false, reason: 'Build payload is missing required PC data.' };
+  }
+  const now = Date.now();
+  const newBuild: PartyBuild = {
+    id: uuid(),
+    name: payload.name ? `${payload.name} (imported)` : 'Imported',
+    createdAt: now,
+    updatedAt: now,
+    pc: payload.pc,
+    loyals: payload.loyals ?? makeLoyalsMap(),
+    praetorians: payload.praetorians ?? [],
+    outpost: payload.outpost ?? { status: {} },
+  };
+  store.update((s) => ({
+    activeBuildId: newBuild.id,
+    builds: [...s.builds, newBuild],
+  }));
+  return { ok: true, id: newBuild.id };
+};

@@ -2,11 +2,13 @@
   import { activeBuild, builds, setActiveBuild, createBuild, renameBuild, duplicateBuild, deleteBuild } from './lib/state/builds';
   import PartyTab from './lib/party/PartyTab.svelte';
   import OutpostTab from './lib/outpost/OutpostTab.svelte';
+  import ExportImportModal from './lib/ExportImportModal.svelte';
 
   type Tab = 'party' | 'outpost';
   let activeTab: Tab = 'party';
   let renaming = false;
   let renameValue = '';
+  let exportImportMode: 'export' | 'import' | null = null;
 
   $: build = $activeBuild;
 
@@ -70,10 +72,16 @@
       {/if}
       <button on:click={onNewBuild} title="Create a new build">New</button>
       <button on:click={onDuplicate} title="Duplicate current build">Copy</button>
+      <button on:click={() => (exportImportMode = 'export')} title="Export this build as a copyable string">Export</button>
+      <button on:click={() => (exportImportMode = 'import')} title="Import a build from a pasted string">Import</button>
       <button on:click={onDelete} title="Delete current build">Delete</button>
     {/if}
   </div>
 </header>
+
+{#if exportImportMode}
+  <ExportImportModal mode={exportImportMode} on:close={() => (exportImportMode = null)} />
+{/if}
 
 <main class="app-main">
   {#if activeTab === 'party'}
