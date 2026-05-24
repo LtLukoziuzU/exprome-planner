@@ -48,8 +48,8 @@
    aria-label={node.name}
 >
   {#if node.isRoot}
-    <!-- Root: colored by building group so the three roots look distinct -->
-    <circle r="32" class="root-bg" class:r-medical={node.group === 'medical'} class:r-market={node.group === 'market'} class:r-recruitment={node.group === 'recruitment'} />
+    <!-- Root: rendered with the same 'owned' gold styling as any built node. -->
+    <circle r="32" class="root-bg" />
     <g class="root-icon">
       <OutpostGroupIcon group={node.group} size={32} />
     </g>
@@ -77,16 +77,14 @@
     opacity: 0.45;
   }
 
+  /* Roots are always built — render with the same gold styling as any 'owned' node */
   .root-bg {
-    fill: #5d1d27;
+    fill: rgba(214, 168, 90, 0.55);
     stroke: var(--gold);
-    stroke-width: 3;
+    stroke-width: 3.5;
   }
-  .root-bg.r-medical    { fill: #7a1f2c; stroke: #e15565; } /* crimson — Dispensary */
-  .root-bg.r-market     { fill: #4a4030; stroke: #c9a86a; } /* bronze   — Market */
-  .root-bg.r-recruitment { fill: #3a4a2d; stroke: #92b06a; } /* olive   — Barracks */
   .root-icon {
-    color: var(--gold-bright);
+    color: var(--bg);
     pointer-events: none;
   }
   .node-icon {

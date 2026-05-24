@@ -88,9 +88,34 @@
     });
   }
 
-  // Edge list: for each non-root node, draw a faint line from each unlock-parent.
+  // Node visual radius — kept here so edge-trimming and the renderer stay in sync.
+  const ROOT_RADIUS = 32;
+  const NODE_RADIUS = 28;
+  const EDGE_PAD = 2; // gap between line tip and circle border, so they don't quite touch
+
+  function trim(from: OutpostNode, to: OutpostNode) {
+    const dx = to.x - from.x;
+    const dy = to.y - from.y;
+    const len = Math.hypot(dx, dy);
+    if (len === 0) return { x1: from.x, y1: from.y, x2: to.x, y2: to.y };
+    const ux = dx / len, uy = dy / len;
+    const rFrom = (from.isRoot ? ROOT_RADIUS : NODE_RADIUS) + EDGE_PAD;
+    const rTo   = (to.isRoot   ? ROOT_RADIUS : NODE_RADIUS) + EDGE_PAD;
+    return {
+      x1: from.x + rFrom * ux,
+      y1: from.y + rFrom * uy,
+      x2: to.x   - rTo * ux,
+      y2: to.y   - rTo * uy,
+    };
+  }
+
+  // Edge list: for each non-root node, draw a line from each unlock-parent.
+  // Endpoints are trimmed so the line never enters either circle.
   $: edges = (() => {
-    type Edge = { from: OutpostNode; to: OutpostNode; satisfied: boolean };
+    type Edge = {
+      from: OutpostNode; to: OutpostNode; satisfied: boolean;
+      x1: number; y1: number; x2: number; y2: number;
+    };
     const out: Edge[] = [];
     for (const node of allNodes()) {
       for (const pid of node.unlockedBy) {
@@ -99,23 +124,19 @@
         const parentBuilt =
           parent.isRoot || ['planned', 'owned'].includes(statusOf(state, parent.id));
         const childBuilt = ['planned', 'owned'].includes(statusOf(state, node.id));
-        out.push({ from: parent, to: node, satisfied: parentBuilt && childBuilt });
+        const coords = trim(parent, node);
+        out.push({ from: parent, to: node, satisfied: parentBuilt && childBuilt, ...coords });
       }
     }
     return out;
   })();
 
-  // Edge between consecutive tiers of the same group, drawn faintly to show the
-  // tier-progression rule visually.
-  $: tierEdges = (() => {
-    type TierEdge = { from: OutpostNode; to: OutpostNode };
-    const out: TierEdge[] = [];
-    for (const node of allNodes()) {
-      if (node.tier === 1) continue;
-      const prev = allNodes().find((n) => n.group === node.group && n.tier === node.tier - 1);
-      if (prev) out.push({ from: prev, to: node });
-    }
-    return out;
+  // Spine: vertical line linking the three roots. Split into two trimmed
+  // segments (R1↔R2, R2↔R3) so it doesn't draw through any root circle.
+  $: spineSegments = (() => {
+    const r1 = nodeById('R1'), r2 = nodeById('R2'), r3 = nodeById('R3');
+    if (!r1 || !r2 || !r3) return [];
+    return [trim(r1, r2), trim(r2, r3)];
   })();
 </script>
 
@@ -152,23 +173,17 @@
 
     <div class="canvas-wrap">
       <svg class="canvas" viewBox="40 150 1230 830" preserveAspectRatio="xMidYMid meet">
-        <!-- tier-progression edges (faint, dashed) drawn first so they sit behind unlock edges -->
-        {#each tierEdges as e (e.from.id + '-' + e.to.id)}
-          <line
-            class="tier-edge"
-            x1={e.from.x} y1={e.from.y} x2={e.to.x} y2={e.to.y}
-          />
+        <!-- spine between the three roots (two trimmed segments) -->
+        {#each spineSegments as s, i (i)}
+          <line class="spine" x1={s.x1} y1={s.y1} x2={s.x2} y2={s.y2}/>
         {/each}
 
-        <!-- spine between the three roots -->
-        <line class="spine" x1="130" y1="295" x2="130" y2="835"/>
-
-        <!-- unlock-graph edges -->
+        <!-- unlock-graph edges, trimmed to stop at circle borders -->
         {#each edges as e (e.from.id + '-' + e.to.id)}
           <line
             class="edge"
             class:satisfied={e.satisfied}
-            x1={e.from.x} y1={e.from.y} x2={e.to.x} y2={e.to.y}
+            x1={e.x1} y1={e.y1} x2={e.x2} y2={e.y2}
           />
         {/each}
 
@@ -358,13 +373,6 @@
     stroke: var(--gold);
     opacity: 0.95;
   }
-  .tier-edge {
-    stroke: var(--bronze);
-    stroke-width: 1.5;
-    stroke-dasharray: 4 6;
-    opacity: 0.25;
-  }
-
   .hint {
     color: var(--text-dim);
     font-size: 0.82rem;
