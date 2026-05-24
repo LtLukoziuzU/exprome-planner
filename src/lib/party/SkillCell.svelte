@@ -77,9 +77,28 @@
   $: lockReason = !tierUnlocked && inc.reason ? inc.reason : '';
   $: refundReason = rank > 0 && !dec.ok ? dec.reason : '';
   $: capReason = rank < skill.maxRank && tierUnlocked && !inc.ok ? inc.reason : '';
+
+  // Tooltip is CSS-positioned but can clip at the viewport edge; on hover,
+  // measure where the cell sits and nudge the tip horizontally to stay inside.
+  let cellEl: HTMLButtonElement | undefined;
+  let tipShift = 0;
+  const EDGE = 8;
+  const TIP_W = 280;
+  function recomputeShift() {
+    if (!cellEl) return;
+    const r = cellEl.getBoundingClientRect();
+    const center = r.left + r.width / 2;
+    const leftEdge = center - TIP_W / 2;
+    const rightEdge = center + TIP_W / 2;
+    const vw = window.innerWidth;
+    if (leftEdge < EDGE) tipShift = EDGE - leftEdge;
+    else if (rightEdge > vw - EDGE) tipShift = vw - EDGE - rightEdge;
+    else tipShift = 0;
+  }
 </script>
 
 <button
+  bind:this={cellEl}
   class="cell"
   class:shake={shaking}
   class:maxed={rank > 0 && rank >= skill.maxRank}
@@ -87,9 +106,12 @@
   class:locked={!tierUnlocked}
   class:has-prereq={hasPrereqParent}
   class:prereq-satisfied={prereqSatisfied}
+  style="--tip-shift: {tipShift}px;"
   on:click={onClick}
   on:contextmenu={onContext}
   on:dblclick={(e) => e.preventDefault()}
+  on:mouseenter={recomputeShift}
+  on:focus={recomputeShift}
   aria-label="{skill.name}, rank {rank} of {skill.maxRank}"
   type="button"
 >
@@ -195,7 +217,7 @@
     position: absolute;
     bottom: calc(100% + 8px);
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(calc(-50% + var(--tip-shift, 0px)));
     width: 280px;
     max-width: 92vw;
     padding: 0.6rem 0.75rem;
@@ -216,7 +238,7 @@
     position: absolute;
     top: 100%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(calc(-50% - var(--tip-shift, 0px)));
     border: 6px solid transparent;
     border-top-color: var(--gold);
   }

@@ -17,18 +17,41 @@
   $: locked = !node.isRoot && status === 'none' && !buildable.ok;
   $: refundBlocked = status !== 'none' && !node.isRoot && !removable.ok;
 
-  // Anchor the tooltip ABOVE the node centre. The page-coord transform
-  // accounts for the document scroll so we can use `position: absolute` on
-  // the body — fixed would jitter on scroll.
+  // Flip below the node when there isn't enough room above the viewport,
+  // and shift horizontally to keep it inside the viewport. Measured after
+  // mount; defaults to "above"/"no-shift" until size is known.
+  let innerEl: HTMLDivElement | undefined;
+  let placeBelow = false;
+  let shiftX = 0;
+  const GAP = 12;
+  const EDGE = 8;
+
+  $: if (innerEl && rect) {
+    const h = innerEl.offsetHeight;
+    const w = innerEl.offsetWidth;
+    placeBelow = rect.top < h + GAP + 4;
+
+    const centerX = rect.left + rect.width / 2;
+    const leftEdge = centerX - w / 2;
+    const rightEdge = centerX + w / 2;
+    const vw = window.innerWidth;
+    if (leftEdge < EDGE) shiftX = EDGE - leftEdge;
+    else if (rightEdge > vw - EDGE) shiftX = vw - EDGE - rightEdge;
+    else shiftX = 0;
+  }
+
   $: left = rect.left + rect.width / 2 + window.scrollX;
-  $: top = rect.top + window.scrollY;
+  $: top = placeBelow
+    ? rect.bottom + window.scrollY
+    : rect.top + window.scrollY;
 </script>
 
 <div class="tip"
-  style="left: {left}px; top: {top}px;"
+  class:below={placeBelow}
+  style="left: {left}px; top: {top}px; --shift: {shiftX}px;"
   role="tooltip"
 >
-  <div class="tip-inner">
+  <div class="tip-inner" bind:this={innerEl}>
     <div class="tip-head">
       <strong>{node.name}</strong>
       <span class="tip-status">{status === 'none' ? 'Not built' : status === 'planned' ? 'Planned' : 'Owned'}</span>
@@ -49,7 +72,10 @@
     z-index: 60;
     pointer-events: none;
     /* Centre horizontally on the node, sit just above its top edge with an arrow */
-    transform: translate(-50%, -100%) translateY(-12px);
+    transform: translate(calc(-50% + var(--shift, 0px)), -100%) translateY(-12px);
+  }
+  .tip.below {
+    transform: translate(calc(-50% + var(--shift, 0px)), 0) translateY(12px);
   }
   .tip-inner {
     position: relative;
@@ -70,9 +96,15 @@
     position: absolute;
     top: 100%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(calc(-50% - var(--shift, 0px)));
     border: 6px solid transparent;
     border-top-color: var(--gold);
+  }
+  .tip.below .tip-inner::after {
+    top: auto;
+    bottom: 100%;
+    border-top-color: transparent;
+    border-bottom-color: var(--gold);
   }
   @keyframes tip-in {
     from { opacity: 0; transform: translateY(4px); }
