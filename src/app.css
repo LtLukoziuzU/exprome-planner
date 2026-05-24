@@ -1,0 +1,78 @@
+:root {
+  /* Game palette: deep navy + bronze/gold + crimson accents */
+  --bg: #0f1a2e;
+  --bg-elevated: #182441;
+  --bg-card: #1f2c4b;
+  --border: #2b3a5d;
+  --border-strong: #4d6094;
+  --gold: #d6a85a;
+  --gold-bright: #ecc680;
+  --bronze: #8a6232;
+  --crimson: #a02736;
+  --crimson-bright: #c3424f;
+  --text: #e7ecf5;
+  --text-dim: #95a3c1;
+  --text-faint: #5d6a87;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+
+  font-family: 'Cinzel', 'Trajan Pro', 'Times New Roman', serif;
+  color: var(--text);
+  background: var(--bg);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+body {
+  background:
+    radial-gradient(circle at 20% 10%, #1a2949 0%, transparent 50%),
+    radial-gradient(circle at 80% 90%, #14223e 0%, transparent 50%),
+    var(--bg);
+}
+
+button {
+  font-family: inherit;
+  color: inherit;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: 3px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: background 120ms, border-color 120ms;
+}
+button:hover {
+  background: var(--bg-card);
+  border-color: var(--gold);
+}
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+input,
+select {
+  font-family: inherit;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border-strong);
+  border-radius: 3px;
+  padding: 6px 10px;
+}
+
+/* Subtle Roman flourish for headers */
+.flourish {
+  font-variant: small-caps;
+  letter-spacing: 0.08em;
+  color: var(--gold-bright);
+}

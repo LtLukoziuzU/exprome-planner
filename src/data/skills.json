@@ -1,0 +1,973 @@
+[
+  {
+    "id": "princeps",
+    "name": "Princeps",
+    "specs": [
+      {
+        "id": "defender",
+        "name": "Defender",
+        "skills": [
+          {
+            "id": "princeps.defender.brace",
+            "name": "Brace",
+            "kind": "active",
+            "column": 1,
+            "row": 1,
+            "maxRank": 2,
+            "description": "Regain 2 stacks of strong. 25% Shield strength restored per stack at turn start. One stack lost per hit. Applies deflecting (deflect next melee attack). Upgrade: Regain 4 stacks."
+          },
+          {
+            "id": "princeps.defender.fortress",
+            "name": "Fortress",
+            "kind": "passive",
+            "column": 1,
+            "row": 2,
+            "maxRank": 1,
+            "description": "Brace restores 1 armour point per stack of strong.",
+            "requiresSkillId": "princeps.defender.brace"
+          },
+          {
+            "id": "princeps.defender.protect",
+            "name": "Protect",
+            "kind": "active",
+            "column": 1,
+            "row": 3,
+            "maxRank": 1,
+            "description": "All direct damage to adjacent friendly unit halved and shared with Princeps. Armour/resistance applied separately."
+          },
+          {
+            "id": "princeps.defender.guardian-angel",
+            "name": "Guardian Angel",
+            "kind": "passive",
+            "column": 1,
+            "row": 4,
+            "maxRank": 1,
+            "description": "Protect now redirects Status effects toward the protecting character.",
+            "requiresSkillId": "princeps.defender.protect"
+          },
+          {
+            "id": "princeps.defender.bastion",
+            "name": "Bastion",
+            "kind": "passive",
+            "column": 2,
+            "row": 1,
+            "maxRank": 1,
+            "description": "+10 to all resistances. Maximum resistance increased from 50% to 60%."
+          },
+          {
+            "id": "princeps.defender.repair",
+            "name": "Repair",
+            "kind": "active",
+            "column": 2,
+            "row": 2,
+            "maxRank": 1,
+            "description": "Applies jury rigged for two turns. Immune to status effects affecting shields. Removes shield-broken, exposed and sundered."
+          },
+          {
+            "id": "princeps.defender.bulwark",
+            "name": "Bulwark",
+            "kind": "passive",
+            "column": 2,
+            "row": 3,
+            "maxRank": 2,
+            "description": "While character has a working shield, counts as cover. Upgrade: counts as high cover."
+          },
+          {
+            "id": "princeps.defender.shield-wall",
+            "name": "Shield Wall",
+            "kind": "active",
+            "column": 2,
+            "row": 4,
+            "maxRank": 1,
+            "description": "Applies Shield Walled and Exhausted, restores Shield Strength to full. Shield walled increases Shield Strength Maximum to 250%; exhausted removes all strong stacks."
+          }
+        ]
+      },
+      {
+        "id": "vanguard",
+        "name": "Vanguard",
+        "skills": [
+          {
+            "id": "princeps.vanguard.hardened",
+            "name": "Hardened",
+            "kind": "passive",
+            "column": 1,
+            "row": 1,
+            "maxRank": 2,
+            "description": "+10% max health. Upgrade: +20%."
+          },
+          {
+            "id": "princeps.vanguard.the-best-defense",
+            "name": "The Best Defense",
+            "kind": "passive",
+            "column": 1,
+            "row": 2,
+            "maxRank": 3,
+            "description": "20% shield damage at full Shield strength. Upgrade 1: 40%. Upgrade 2: 60%."
+          },
+          {
+            "id": "princeps.vanguard.taunt",
+            "name": "Taunt",
+            "kind": "active",
+            "column": 1,
+            "row": 3,
+            "maxRank": 1,
+            "description": "Forces enemy to attack taunting character at start of their turn. Range: 6 hexes."
+          },
+          {
+            "id": "princeps.vanguard.bull-rush",
+            "name": "Bull Rush",
+            "kind": "active",
+            "column": 1,
+            "row": 4,
+            "maxRank": 1,
+            "description": "Shield bludgeoning damage. Move in straight line, knocking down enemies and allies alike."
+          },
+          {
+            "id": "princeps.vanguard.frighten",
+            "name": "Frighten",
+            "kind": "active",
+            "column": 2,
+            "row": 1,
+            "maxRank": 1,
+            "description": "-10 morale to all enemies within range. 3 hex radius."
+          },
+          {
+            "id": "princeps.vanguard.flawless-defence",
+            "name": "Flawless Defence",
+            "kind": "active",
+            "column": 2,
+            "row": 2,
+            "maxRank": 2,
+            "description": "Applies defending status, increasing all resistance to highest value. Max resistance +10%, costs 3 movement. Upgrade: +15%."
+          },
+          {
+            "id": "princeps.vanguard.adrenaline-junkie",
+            "name": "Adrenaline Junkie",
+            "kind": "passive",
+            "column": 2,
+            "row": 3,
+            "maxRank": 1,
+            "description": "+50% damage when Health < 50% of Maximum Health."
+          },
+          {
+            "id": "princeps.vanguard.avenger",
+            "name": "Avenger",
+            "kind": "passive",
+            "column": 2,
+            "row": 4,
+            "maxRank": 1,
+            "description": "When ally incapacitated/killed, Shield Strength restored to full and +20% damage for rest of battle."
+          }
+        ]
+      },
+      {
+        "id": "veteran",
+        "name": "Veteran",
+        "skills": [
+          {
+            "id": "princeps.veteran.nimble",
+            "name": "Nimble",
+            "kind": "passive",
+            "column": 1,
+            "row": 1,
+            "maxRank": 2,
+            "description": "Lowers movement penalty from light or heavier armor by -1. Upgrade: -2."
+          },
+          {
+            "id": "princeps.veteran.headbutt",
+            "name": "Headbutt",
+            "kind": "active",
+            "column": 1,
+            "row": 2,
+            "maxRank": 1,
+            "description": "Unarmed damage. Sets attacker movement to 0. Applies Weakened. If target already Weakened/Harried: Stunned instead."
+          },
+          {
+            "id": "princeps.veteran.battering-ram",
+            "name": "Battering Ram",
+            "kind": "passive",
+            "column": 1,
+            "row": 3,
+            "maxRank": 2,
+            "description": "+1 base damage to equipped shields in all conditions. Upgrade: +3 total."
+          },
+          {
+            "id": "princeps.veteran.war-cry",
+            "name": "War Cry",
+            "kind": "active",
+            "column": 1,
+            "row": 4,
+            "maxRank": 2,
+            "description": "Applies stunned to enemies in 1 hex radius. Upgrade: 2 hex radius."
+          },
+          {
+            "id": "princeps.veteran.knockdown",
+            "name": "Knockdown",
+            "kind": "active",
+            "column": 2,
+            "row": 1,
+            "maxRank": 1,
+            "description": "Unarmed damage. Applies knocked down."
+          },
+          {
+            "id": "princeps.veteran.opportunist",
+            "name": "Opportunist",
+            "kind": "passive",
+            "column": 2,
+            "row": 2,
+            "maxRank": 2,
+            "description": "Attacks of opportunity apply Weakened. Upgrade: applies Stunned."
+          },
+          {
+            "id": "princeps.veteran.stand-fast",
+            "name": "Stand Fast",
+            "kind": "active",
+            "column": 2,
+            "row": 3,
+            "maxRank": 1,
+            "description": "Allies in 2 hex radius immune to crippled/stunned/stuck/knocked down for 2 turns. Also removes those effects."
+          },
+          {
+            "id": "princeps.veteran.immoveable",
+            "name": "Immoveable",
+            "kind": "passive",
+            "column": 2,
+            "row": 4,
+            "maxRank": 1,
+            "description": "Immunity to being moved by rebuke, shove, Shield Push, Push and Shove, Repulse, Counter-Advance."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "sagittarius",
+    "name": "Sagittarius",
+    "specs": [
+      {
+        "id": "marksman",
+        "name": "Marksman",
+        "skills": [
+          {
+            "id": "sagittarius.marksman.interrupt",
+            "name": "Interrupt",
+            "kind": "active",
+            "column": 1,
+            "row": 1,
+            "maxRank": 2,
+            "description": "Attacks next target that moves in 120° cone in front. Slightly more damage. Range 12 hexes. Upgrade: 160° cone."
+          },
+          {
+            "id": "sagittarius.marksman.vigilant",
+            "name": "Vigilant",
+            "kind": "passive",
+            "column": 1,
+            "row": 2,
+            "maxRank": 1,
+            "description": "Interrupt hits up to 2 targets instead of 1.",
+            "requiresSkillId": "sagittarius.marksman.interrupt"
+          },
+          {
+            "id": "sagittarius.marksman.gracing-shot",
+            "name": "Gracing shot",
+            "kind": "active",
+            "column": 1,
+            "row": 3,
+            "maxRank": 2,
+            "description": "Applies gracing to self. Next ranged attacks deal slashing damage with -33% accuracy and shred 1 armour. Upgrade: shred 2."
+          },
+          {
+            "id": "sagittarius.marksman.steady-hands",
+            "name": "Steady Hands",
+            "kind": "passive",
+            "column": 1,
+            "row": 4,
+            "maxRank": 1,
+            "description": "100% critical chance for all ranged reaction attacks (Interrupt and Overwatch)."
+          },
+          {
+            "id": "sagittarius.marksman.point-blank",
+            "name": "Point Blank",
+            "kind": "passive",
+            "column": 2,
+            "row": 1,
+            "maxRank": 1,
+            "description": "100% critical chance for ranged attacks against adjacent opponents. Provokes Attack of Opportunity."
+          },
+          {
+            "id": "sagittarius.marksman.rebuke",
+            "name": "Rebuke",
+            "kind": "active",
+            "column": 2,
+            "row": 2,
+            "maxRank": 2,
+            "description": "3 bludgeoning damage. Pushes target 1 hex away. Usable on friendly characters. Upgrade: doubles damage."
+          },
+          {
+            "id": "sagittarius.marksman.powerful-kick",
+            "name": "Powerful Kick",
+            "kind": "passive",
+            "column": 2,
+            "row": 3,
+            "maxRank": 2,
+            "description": "Rebuke also applies knocked down. Upgrade: applies Tactical effect to archer.",
+            "requiresSkillId": "sagittarius.marksman.rebuke"
+          },
+          {
+            "id": "sagittarius.marksman.overwatch",
+            "name": "Overwatch",
+            "kind": "active",
+            "column": 2,
+            "row": 4,
+            "maxRank": 1,
+            "description": "Shoots each enemy that attacks an ally within range (once per enemy). Weapon damage, 6 hex radius. Deflected by shield."
+          }
+        ]
+      },
+      {
+        "id": "hunter",
+        "name": "Hunter",
+        "skills": [
+          {
+            "id": "sagittarius.hunter.quick-shot",
+            "name": "Quick Shot",
+            "kind": "active",
+            "column": 1,
+            "row": 1,
+            "maxRank": 1,
+            "description": "Shoots 2 arrows at 2 targets with -30% accuracy, 30% chance to miss. Weapon damage, deflected by shields."
+          },
+          {
+            "id": "sagittarius.hunter.lure",
+            "name": "Lure",
+            "kind": "active",
+            "column": 1,
+            "row": 2,
+            "maxRank": 1,
+            "description": "Bludgeoning damage. Prevents target from using cover (lured effect). Range 6 hexes."
+          },
+          {
+            "id": "sagittarius.hunter.pinning-shots",
+            "name": "Pinning shots",
+            "kind": "passive",
+            "column": 1,
+            "row": 3,
+            "maxRank": 3,
+            "description": "All ranged hits within 2 hexes apply crippled. Upgrade 1: range 4 hexes. Upgrade 2: applies Stuck instead."
+          },
+          {
+            "id": "sagittarius.hunter.barrage",
+            "name": "Barrage",
+            "kind": "active",
+            "column": 1,
+            "row": 4,
+            "maxRank": 1,
+            "description": "On each shot, regain action point. -33% accuracy. Lasts 1 turn only."
+          },
+          {
+            "id": "sagittarius.hunter.versatile",
+            "name": "Versatile",
+            "kind": "passive",
+            "column": 2,
+            "row": 1,
+            "maxRank": 2,
+            "description": "After any attack, next attack of the other type (melee↔ranged) deals +50% damage. Upgrade: also +1 armour penetrating."
+          },
+          {
+            "id": "sagittarius.hunter.skirmisher",
+            "name": "Skirmisher",
+            "kind": "passive",
+            "column": 2,
+            "row": 2,
+            "maxRank": 1,
+            "description": "Versatile has 100% critical chance when previous attack killed a target.",
+            "requiresSkillId": "sagittarius.hunter.versatile"
+          },
+          {
+            "id": "sagittarius.hunter.arrow-stab",
+            "name": "Arrow Stab",
+            "kind": "active",
+            "column": 2,
+            "row": 3,
+            "maxRank": 1,
+            "description": "Weapon damage at half damage, inflicts bleeding. When flanked, target also stunned."
+          },
+          {
+            "id": "sagittarius.hunter.find-weakness",
+            "name": "Find weakness",
+            "kind": "passive",
+            "column": 2,
+            "row": 4,
+            "maxRank": 1,
+            "description": "Grants Finding Weakness each turn. Next attack inflicts Bleeding, Weakened, or Harried."
+          }
+        ]
+      },
+      {
+        "id": "sniper",
+        "name": "Sniper",
+        "skills": [
+          {
+            "id": "sagittarius.sniper.ranging-shot",
+            "name": "Ranging shot",
+            "kind": "active",
+            "column": 1,
+            "row": 1,
+            "maxRank": 1,
+            "description": "Range 4 hexes. Applies spotted in 2 hex radius (spotted = full damage regardless of distance). Finds invisible enemies, breaks invisibility for 2 turns."
+          },
+          {
+            "id": "sagittarius.sniper.spotter",
+            "name": "Spotter",
+            "kind": "passive",
+            "column": 1,
+            "row": 2,
+            "maxRank": 1,
+            "description": "Ranging shots now shoots two arrows at chosen spots.",
+            "requiresSkillId": "sagittarius.sniper.ranging-shot"
+          },
+          {
+            "id": "sagittarius.sniper.eagle-eye",
+            "name": "Eagle Eye",
+            "kind": "active",
+            "column": 1,
+            "row": 3,
+            "maxRank": 1,
+            "description": "Next ranged attack ignores target's shield strength and cannot be Resisted."
+          },
+          {
+            "id": "sagittarius.sniper.seize-ground",
+            "name": "Seize ground",
+            "kind": "passive",
+            "column": 1,
+            "row": 4,
+            "maxRank": 1,
+            "description": "Start combat with double movement for first 2 turns. Killing target >12 hexes away replenishes a random skill charge."
+          },
+          {
+            "id": "sagittarius.sniper.marksman",
+            "name": "Marksman",
+            "kind": "passive",
+            "column": 2,
+            "row": 1,
+            "maxRank": 2,
+            "description": "+2 accuracy (range). Upgrade: +4."
+          },
+          {
+            "id": "sagittarius.sniper.mark-target",
+            "name": "Mark target",
+            "kind": "active",
+            "column": 2,
+            "row": 2,
+            "maxRank": 2,
+            "description": "Applies marked to target up to 10 hexes. Target can be attacked at any range. Next ranged attack deals +25% damage; if killed by ranged attack, effect jumps to next target. Upgrade: +50%."
+          },
+          {
+            "id": "sagittarius.sniper.walk-your-shots",
+            "name": "Walk Your Shots",
+            "kind": "passive",
+            "column": 2,
+            "row": 3,
+            "maxRank": 3,
+            "description": "+2 optimal range (not max range). Upgrade 1: another +2. Upgrade 2: +6 total."
+          },
+          {
+            "id": "sagittarius.sniper.assist",
+            "name": "Assist",
+            "kind": "active",
+            "column": 2,
+            "row": 4,
+            "maxRank": 1,
+            "description": "Weapon damage. Target provokes attack of opportunity as if they moved. Nearby allies may attack."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "triarius",
+    "name": "Triarius",
+    "specs": [
+      {
+        "id": "medic",
+        "name": "Medic",
+        "skills": [
+          {
+            "id": "triarius.medic.field-medic",
+            "name": "Field Medic",
+            "kind": "passive",
+            "column": 1,
+            "row": 1,
+            "maxRank": 2,
+            "description": "+25% health restored when healing. Upgrade: +50%."
+          },
+          {
+            "id": "triarius.medic.cure",
+            "name": "Cure",
+            "kind": "active",
+            "column": 1,
+            "row": 2,
+            "maxRank": 1,
+            "description": "Removes bleeding, burned, burning, and poisoned."
+          },
+          {
+            "id": "triarius.medic.good-as-new",
+            "name": "Good as New",
+            "kind": "passive",
+            "column": 1,
+            "row": 3,
+            "maxRank": 1,
+            "description": "Cure also restores 25% health per status effect removed.",
+            "requiresSkillId": "triarius.medic.cure"
+          },
+          {
+            "id": "triarius.medic.interference",
+            "name": "Interference",
+            "kind": "passive",
+            "column": 1,
+            "row": 4,
+            "maxRank": 1,
+            "description": "When any enemy in reach attacks an ally, this character may perform an attack of opportunity."
+          },
+          {
+            "id": "triarius.medic.logistics",
+            "name": "Logistics",
+            "kind": "active",
+            "column": 2,
+            "row": 1,
+            "maxRank": 2,
+            "description": "+2 movement to allies in 3 hex radius for 2 turns. Upgrade: +3 movement, 4 hex radius."
+          },
+          {
+            "id": "triarius.medic.poisoner",
+            "name": "Poisoner",
+            "kind": "passive",
+            "column": 2,
+            "row": 2,
+            "maxRank": 2,
+            "description": "5% chance any attack inflicts Poison. Upgrade: 10%."
+          },
+          {
+            "id": "triarius.medic.revive",
+            "name": "Revive",
+            "kind": "active",
+            "column": 2,
+            "row": 3,
+            "maxRank": 2,
+            "description": "Bring incapacitated ally back with 25% health. Revived character can move, no action point. Provokes attack of opportunity. Upgrade: 50% health."
+          },
+          {
+            "id": "triarius.medic.curse",
+            "name": "Curse",
+            "kind": "active",
+            "column": 2,
+            "row": 4,
+            "maxRank": 1,
+            "description": "Apply Weakened to multiple enemies in 6 hex radius."
+          }
+        ]
+      },
+      {
+        "id": "flagbearer",
+        "name": "Flagbearer",
+        "skills": [
+          {
+            "id": "triarius.flagbearer.war-horn",
+            "name": "War Horn",
+            "kind": "active",
+            "column": 1,
+            "row": 1,
+            "maxRank": 2,
+            "description": "+20% damage to allies for 2 turns in 3 hex radius. Upgrade: 3 turns, 4 hex radius."
+          },
+          {
+            "id": "triarius.flagbearer.guidance",
+            "name": "Guidance",
+            "kind": "passive",
+            "column": 1,
+            "row": 2,
+            "maxRank": 2,
+            "description": "Downing enemy grants +3 morale to allies within 3 hexes. Upgrade: +5."
+          },
+          {
+            "id": "triarius.flagbearer.ruse",
+            "name": "Ruse",
+            "kind": "active",
+            "column": 1,
+            "row": 3,
+            "maxRank": 1,
+            "description": "All enemies in area move out. Range 8 hexes, 1 hex radius (7 hexes total)."
+          },
+          {
+            "id": "triarius.flagbearer.embarrassing-ruse",
+            "name": "Embarrassing ruse",
+            "kind": "passive",
+            "column": 1,
+            "row": 4,
+            "maxRank": 2,
+            "description": "Ruse also lowers morale by -10 for enemies in hexes. Upgrade: -20.",
+            "requiresSkillId": "triarius.flagbearer.ruse"
+          },
+          {
+            "id": "triarius.flagbearer.bolstering-presence",
+            "name": "Bolstering presence",
+            "kind": "passive",
+            "column": 2,
+            "row": 1,
+            "maxRank": 1,
+            "description": "Grants bolstered to all adjacent allies, allowing them to not fail morale checks."
+          },
+          {
+            "id": "triarius.flagbearer.inspire",
+            "name": "Inspire",
+            "kind": "active",
+            "column": 2,
+            "row": 2,
+            "maxRank": 1,
+            "description": "Grants an ally who spent their action point a new one. Provokes attack of opportunity. Range 8 hexes."
+          },
+          {
+            "id": "triarius.flagbearer.orator",
+            "name": "Orator",
+            "kind": "passive",
+            "column": 2,
+            "row": 3,
+            "maxRank": 1,
+            "description": "Inspire also resets cooldown of skills of the ally.",
+            "requiresSkillId": "triarius.flagbearer.inspire"
+          },
+          {
+            "id": "triarius.flagbearer.rousing-speech",
+            "name": "Rousing speech",
+            "kind": "active",
+            "column": 2,
+            "row": 4,
+            "maxRank": 2,
+            "description": "Restore 15 health or 25% total health of allies in 6 hex radius. Upgrade: 2 charges."
+          }
+        ]
+      },
+      {
+        "id": "destroyer",
+        "name": "Destroyer",
+        "skills": [
+          {
+            "id": "triarius.destroyer.deathblow",
+            "name": "Deathblow",
+            "kind": "active",
+            "column": 1,
+            "row": 1,
+            "maxRank": 2,
+            "description": "+50% damage against stunned, knocked down, and sundered characters. Upgrade: also applies to stuck and crippled."
+          },
+          {
+            "id": "triarius.destroyer.shredder",
+            "name": "Shredder",
+            "kind": "passive",
+            "column": 1,
+            "row": 2,
+            "maxRank": 1,
+            "description": "+1 armor shredding for staves and pikes."
+          },
+          {
+            "id": "triarius.destroyer.reckless",
+            "name": "Reckless",
+            "kind": "active",
+            "column": 1,
+            "row": 3,
+            "maxRank": 2,
+            "description": "+25% base damage and +1 armour shredding for 2 turns. No resistances, cannot use tactical weapons. Upgrade: +50% base damage."
+          },
+          {
+            "id": "triarius.destroyer.sunder",
+            "name": "Sunder",
+            "kind": "active",
+            "column": 1,
+            "row": 4,
+            "maxRank": 1,
+            "description": "Sets shield strength to 0 before dealing damage. Cannot be resisted (except hunkering down). Applies sundering effect."
+          },
+          {
+            "id": "triarius.destroyer.fortune-favoured",
+            "name": "Fortune favoured",
+            "kind": "passive",
+            "column": 2,
+            "row": 1,
+            "maxRank": 2,
+            "description": "+5% critical hit chance. Upgrade: +10%."
+          },
+          {
+            "id": "triarius.destroyer.quick-lunge",
+            "name": "Quick lunge",
+            "kind": "active",
+            "column": 2,
+            "row": 2,
+            "maxRank": 1,
+            "description": "Half damage weapon attack, cripples enemies, no armour shred. Range 1-2 hexes."
+          },
+          {
+            "id": "triarius.destroyer.quick-feet",
+            "name": "Quick feet",
+            "kind": "passive",
+            "column": 2,
+            "row": 3,
+            "maxRank": 1,
+            "description": "No longer triggers attacks of opportunity when moving around enemies (only when disengaging)."
+          },
+          {
+            "id": "triarius.destroyer.finisher",
+            "name": "Finisher",
+            "kind": "passive",
+            "column": 2,
+            "row": 4,
+            "maxRank": 2,
+            "description": "Attacking stuck/knocked down/stunned enemy restores 10% health. Killing them restores action point and resets Deathblow. Upgrade: 20% health."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "veles",
+    "name": "Veles",
+    "specs": [
+      {
+        "id": "assassin",
+        "name": "Assassin",
+        "skills": [
+          {
+            "id": "veles.assassin.cheap-shot",
+            "name": "Cheap shot",
+            "kind": "active",
+            "column": 1,
+            "row": 1,
+            "maxRank": 1,
+            "description": "Applies Savage to self. Next attack is a critical hit."
+          },
+          {
+            "id": "veles.assassin.assassinate",
+            "name": "Assassinate",
+            "kind": "passive",
+            "column": 1,
+            "row": 2,
+            "maxRank": 1,
+            "description": "+40% damage against enemy leaders (characters with laurels in portrait)."
+          },
+          {
+            "id": "veles.assassin.focus-master",
+            "name": "Focus Master",
+            "kind": "passive",
+            "column": 1,
+            "row": 3,
+            "maxRank": 2,
+            "description": "+1 Focus Maximum. Upgrade: +2 total."
+          },
+          {
+            "id": "veles.assassin.rush",
+            "name": "Rush",
+            "kind": "active",
+            "column": 1,
+            "row": 4,
+            "maxRank": 2,
+            "description": "Restore action point. Upgrade: 5 focus cost, 3 charges.",
+            "requiresSkillId": "veles.assassin.focus-master"
+          },
+          {
+            "id": "veles.assassin.lone-wolf",
+            "name": "Lone Wolf",
+            "kind": "passive",
+            "column": 2,
+            "row": 1,
+            "maxRank": 1,
+            "description": "Critical chance doubled and +20% dodge when all allies are ≥6 hexes away."
+          },
+          {
+            "id": "veles.assassin.sneak-attack",
+            "name": "Sneak Attack",
+            "kind": "active",
+            "column": 2,
+            "row": 2,
+            "maxRank": 2,
+            "description": "Off-hand weapon/Unarmed damage. Generates 1 focus. +50% damage first 2 turns. Upgrade: +100%."
+          },
+          {
+            "id": "veles.assassin.marathon",
+            "name": "Marathon",
+            "kind": "active",
+            "column": 2,
+            "row": 3,
+            "maxRank": 1,
+            "description": "Applies inexhaustible: unlimited movement until character stops."
+          },
+          {
+            "id": "veles.assassin.first-strike",
+            "name": "First strike",
+            "kind": "passive",
+            "column": 2,
+            "row": 4,
+            "maxRank": 1,
+            "description": "+50% damage against targets with full health."
+          }
+        ]
+      },
+      {
+        "id": "duelist",
+        "name": "Duelist",
+        "skills": [
+          {
+            "id": "veles.duelist.shiv",
+            "name": "Shiv",
+            "kind": "active",
+            "column": 1,
+            "row": 1,
+            "maxRank": 1,
+            "description": "Quick off-hand attack at half damage, no action point required."
+          },
+          {
+            "id": "veles.duelist.bloodthirsty",
+            "name": "Bloodthirsty",
+            "kind": "passive",
+            "column": 1,
+            "row": 2,
+            "maxRank": 2,
+            "description": "Killing enemy grants 1 stack of Bloodthirsty (+5% damage). Upgrade: +15% per stack. Max 2 stacks = 30% extra total."
+          },
+          {
+            "id": "veles.duelist.kill-on-ground",
+            "name": "Kill on Ground",
+            "kind": "active",
+            "column": 1,
+            "row": 3,
+            "maxRank": 1,
+            "description": "Finish off incapacitated enemy, inflict -10 morale on nearby enemies in 5 hex radius."
+          },
+          {
+            "id": "veles.duelist.quick-witted",
+            "name": "Quick-witted",
+            "kind": "passive",
+            "column": 1,
+            "row": 4,
+            "maxRank": 1,
+            "description": "+1 focus gained per attack."
+          },
+          {
+            "id": "veles.duelist.born-ready",
+            "name": "Born ready",
+            "kind": "passive",
+            "column": 2,
+            "row": 1,
+            "maxRank": 3,
+            "description": "Start with 4 focus points. Upgrade 1: 8. Upgrade 2: 12."
+          },
+          {
+            "id": "veles.duelist.dodge",
+            "name": "Dodge",
+            "kind": "active",
+            "column": 2,
+            "row": 2,
+            "maxRank": 1,
+            "description": "Next attack has 50% chance to miss; if dodged, no damage or status effects."
+          },
+          {
+            "id": "veles.duelist.slippery",
+            "name": "Slippery",
+            "kind": "passive",
+            "column": 2,
+            "row": 3,
+            "maxRank": 1,
+            "description": "Dodge lasts until beginning of character's next turn (instead of ending after first attack).",
+            "requiresSkillId": "veles.duelist.dodge"
+          },
+          {
+            "id": "veles.duelist.duel",
+            "name": "Duel",
+            "kind": "active",
+            "column": 2,
+            "row": 4,
+            "maxRank": 1,
+            "description": "Calls out specific enemy; next attack deals double damage, inflicts stunned and bleeding. Range 12 hexes."
+          }
+        ]
+      },
+      {
+        "id": "brawler",
+        "name": "Brawler",
+        "skills": [
+          {
+            "id": "veles.brawler.tactical-advance",
+            "name": "Tactical advance",
+            "kind": "active",
+            "column": 1,
+            "row": 1,
+            "maxRank": 2,
+            "description": "No attacks of opportunity while moving. Upgrade: +2 movement and activates traps."
+          },
+          {
+            "id": "veles.brawler.clear-path",
+            "name": "Clear Path",
+            "kind": "passive",
+            "column": 1,
+            "row": 2,
+            "maxRank": 1,
+            "description": "On killing target, replenish 2 movement to nearby allies and self. 2 hex radius."
+          },
+          {
+            "id": "veles.brawler.pugilist",
+            "name": "Pugilist",
+            "kind": "passive",
+            "column": 1,
+            "row": 3,
+            "maxRank": 1,
+            "description": "+1 focus per attack when using unarmed skills."
+          },
+          {
+            "id": "veles.brawler.reaper",
+            "name": "Reaper",
+            "kind": "active",
+            "column": 1,
+            "row": 4,
+            "maxRank": 1,
+            "description": "While active, killing an enemy restores action point, resets skills, and restores movement."
+          },
+          {
+            "id": "veles.brawler.pankration",
+            "name": "Pankration",
+            "kind": "passive",
+            "column": 2,
+            "row": 1,
+            "maxRank": 1,
+            "description": "+100% unarmed damage."
+          },
+          {
+            "id": "veles.brawler.feint",
+            "name": "Feint",
+            "kind": "active",
+            "column": 2,
+            "row": 2,
+            "maxRank": 1,
+            "description": "Move through hex occupied by enemy, ending in hex behind them. Usable on friendly characters too."
+          },
+          {
+            "id": "veles.brawler.boast",
+            "name": "Boast",
+            "kind": "active",
+            "column": 2,
+            "row": 3,
+            "maxRank": 2,
+            "description": "On killing enemy, allies gain +10 morale; on failure, all enemies gain +10 morale. Upgrade: grants Savage on success."
+          },
+          {
+            "id": "veles.brawler.heavy-skirmisher",
+            "name": "Heavy skirmisher",
+            "kind": "passive",
+            "column": 2,
+            "row": 4,
+            "maxRank": 2,
+            "description": "Rank 1: can wear strong armour. Rank 2: -1 movement for all body armour."
+          }
+        ]
+      }
+    ]
+  }
+]
