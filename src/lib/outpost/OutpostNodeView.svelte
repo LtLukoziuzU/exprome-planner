@@ -1,16 +1,16 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
   import type { NodeStatus, OutpostNode } from '../types';
-  import { outpostData, costAsString } from '../outpost-rules';
   import type { AllocateCheck } from '../outpost-rules';
+  import OutpostGroupIcon from './OutpostGroupIcon.svelte';
 
   export let node: OutpostNode;
   export let status: NodeStatus;
   export let buildable: AllocateCheck;
-  export let removable: AllocateCheck;
+  // Passed for symmetry with buildable; the tooltip in the parent consumes it.
+  export const removable: AllocateCheck = { ok: true };
 
   const dispatch = createEventDispatcher();
-  const DATA = outpostData();
 
   let isCoarsePointer = false;
   if (typeof window !== 'undefined' && window.matchMedia) {
@@ -22,41 +22,46 @@
     dispatch('click', { coarse: isCoarsePointer });
   }
 
+  function onEnter(e: MouseEvent) {
+    if (isCoarsePointer) return;
+    const rect = (e.currentTarget as SVGGraphicsElement).getBoundingClientRect();
+    dispatch('enter', { node, rect });
+  }
+  function onLeave() {
+    if (isCoarsePointer) return;
+    dispatch('leave');
+  }
+
   // Tier numeral for the banner below each node.
   const TIER_NUMERAL = { 1: 'I', 2: 'II', 3: 'III' } as const;
 
-  $: groupName = DATA.groups[node.group]?.name ?? node.group;
   $: tierBadge = TIER_NUMERAL[node.tier];
   $: locked = !node.isRoot && status === 'none' && !buildable.ok;
-
-  $: tipLines = [
-    `${node.name}  ·  ${groupName} ${tierBadge}`,
-    node.description,
-    node.isRoot ? 'Root building — always built.' : `Cost: ${costAsString(node.cost)}`,
-    locked ? (buildable.reason ?? '') : '',
-    status !== 'none' && !node.isRoot && !removable.ok ? (removable.reason ?? '') : '',
-  ].filter(Boolean).join('\n\n');
 </script>
 
 <g class="node-g" class:locked transform="translate({node.x}, {node.y})"
    on:click={onClick}
+   on:mouseenter={onEnter}
+   on:mouseleave={onLeave}
    role="button"
    tabindex="0"
    aria-label={node.name}
 >
-  <title>{tipLines}</title>
-
   {#if node.isRoot}
     <!-- Root: colored by building group so the three roots look distinct -->
     <circle r="32" class="root-bg" class:r-medical={node.group === 'medical'} class:r-market={node.group === 'market'} class:r-recruitment={node.group === 'recruitment'} />
-    <text class="root-num" y="6">{node.id}</text>
+    <g class="root-icon">
+      <OutpostGroupIcon group={node.group} size={32} />
+    </g>
   {:else}
     <circle r="28"
       class="node-bg"
       class:planned={status === 'planned'}
       class:owned={status === 'owned'}
     />
-    <text class="num" y="5">{node.id}</text>
+    <g class="node-icon" class:planned={status === 'planned'} class:owned={status === 'owned'}>
+      <OutpostGroupIcon group={node.group} size={26} />
+    </g>
   {/if}
 
   <!-- Tier label below the node -->
@@ -80,13 +85,20 @@
   .root-bg.r-medical    { fill: #7a1f2c; stroke: #e15565; } /* crimson — Dispensary */
   .root-bg.r-market     { fill: #4a4030; stroke: #c9a86a; } /* bronze   — Market */
   .root-bg.r-recruitment { fill: #3a4a2d; stroke: #92b06a; } /* olive   — Barracks */
-  .root-num {
-    fill: var(--gold-bright);
-    font-family: Georgia, serif;
-    font-weight: bold;
-    font-size: 20px;
-    text-anchor: middle;
+  .root-icon {
+    color: var(--gold-bright);
     pointer-events: none;
+  }
+  .node-icon {
+    color: var(--text);
+    pointer-events: none;
+    transition: color 100ms;
+  }
+  .node-icon.planned {
+    color: var(--gold-bright);
+  }
+  .node-icon.owned {
+    color: var(--bg);
   }
 
   .node-bg {
@@ -110,17 +122,6 @@
     stroke-width: 3;
   }
 
-  .num {
-    fill: var(--text);
-    font-family: Georgia, serif;
-    font-weight: bold;
-    font-size: 18px;
-    text-anchor: middle;
-    pointer-events: none;
-  }
-  .node-bg.owned + .num {
-    fill: var(--bg);
-  }
 
   .tier {
     fill: var(--text-dim);

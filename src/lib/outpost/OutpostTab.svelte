@@ -15,6 +15,7 @@
   } from '../outpost-rules';
   import OutpostNodeView from './OutpostNodeView.svelte';
   import OutpostDetailCard from './OutpostDetailCard.svelte';
+  import OutpostTooltip from './OutpostTooltip.svelte';
 
   const DATA = outpostData();
   $: build = $activeBuild;
@@ -38,6 +39,28 @@
   // Tap-card focus (mobile)
   let focusedId: string | null = null;
   $: focusedNode = focusedId ? nodeById(focusedId) ?? null : null;
+
+  // Desktop hover tooltip — 80ms delay-in, instant hide.
+  let hoveredNode: OutpostNode | null = null;
+  let hoveredRect: DOMRect | null = null;
+  let showTimer: ReturnType<typeof setTimeout> | null = null;
+
+  function onNodeEnter(e: CustomEvent<{ node: OutpostNode; rect: DOMRect }>) {
+    if (showTimer) clearTimeout(showTimer);
+    const { node, rect } = e.detail;
+    showTimer = setTimeout(() => {
+      hoveredNode = node;
+      hoveredRect = rect;
+    }, 80);
+  }
+  function onNodeLeave() {
+    if (showTimer) {
+      clearTimeout(showTimer);
+      showTimer = null;
+    }
+    hoveredNode = null;
+    hoveredRect = null;
+  }
 
   function onNodeClick(node: OutpostNode, isCoarsePointer: boolean) {
     if (isCoarsePointer) {
@@ -157,6 +180,8 @@
             buildable={canBuild(node, state)}
             removable={canUnbuild(node, state)}
             on:click={(e) => onNodeClick(node, e.detail.coarse)}
+            on:enter={onNodeEnter}
+            on:leave={onNodeLeave}
           />
         {/each}
       </svg>
@@ -168,6 +193,16 @@
   </div>
 {:else}
   <div class="empty">No active build.</div>
+{/if}
+
+{#if hoveredNode && hoveredRect}
+  <OutpostTooltip
+    node={hoveredNode}
+    status={statusOf(state, hoveredNode.id)}
+    buildable={canBuild(hoveredNode, state)}
+    removable={canUnbuild(hoveredNode, state)}
+    rect={hoveredRect}
+  />
 {/if}
 
 {#if focusedNode}

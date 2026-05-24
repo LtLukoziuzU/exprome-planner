@@ -58,13 +58,18 @@ await page.screenshot({ path: resolve(OUT, 'desktop-outpost-empty.png'), fullPag
 const node1 = page.locator('[aria-label="Speculator Tent"]').first();
 await node1.click();
 await page.waitForTimeout(150);
-const status1 = await node1.locator('circle').getAttribute('class');
+const status1 = await node1.locator('circle').first().getAttribute('class');
 console.log('After 1st click on Speculator Tent — circle classes:', status1);
 
 // Click again to mark owned.
 await node1.click();
 await page.waitForTimeout(150);
 await page.screenshot({ path: resolve(OUT, 'desktop-outpost-planned.png'), fullPage: true });
+
+// Hover a different node to capture the custom tooltip.
+await page.locator('[aria-label="Bath"]').first().hover();
+await page.waitForTimeout(300);
+await page.screenshot({ path: resolve(OUT, 'desktop-outpost-tooltip.png'), fullPage: false });
 
 console.log(`Console errors: ${errors.length ? errors.join('\n  ') : 'none'}`);
 console.log(`Screenshots written to ${OUT}`);
