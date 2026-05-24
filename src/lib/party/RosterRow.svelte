@@ -34,6 +34,7 @@
   let editingName = false;
   let nameDraft = character.name;
   function startEditName(e: Event) {
+    e.preventDefault();
     e.stopPropagation();
     if (!editableName) return;
     nameDraft = character.name;
@@ -115,6 +116,9 @@
     </span>
   </span>
 
+  {#if editableName && !editingName}
+    <button class="edit" on:click={startEditName} title="Rename">✎</button>
+  {/if}
   {#if deletable}
     <button class="del" on:click={onDelete} title="Delete">×</button>
   {/if}
@@ -202,14 +206,27 @@
     color: var(--gold-bright);
   }
 
+  .edit,
   .del {
     flex: 0 0 auto;
     padding: 0 7px;
     background: transparent;
     border: 1px solid var(--border);
     color: var(--text-faint);
-    font-size: 1rem;
+    font-size: 0.95rem;
     line-height: 1.2;
+    opacity: 0;
+    transition: opacity 100ms;
+  }
+  .row:hover .edit,
+  .row:hover .del,
+  .row.active .edit,
+  .row.active .del {
+    opacity: 1;
+  }
+  .edit:hover {
+    color: var(--gold-bright);
+    border-color: var(--gold);
   }
   .del:hover {
     color: var(--crimson-bright);

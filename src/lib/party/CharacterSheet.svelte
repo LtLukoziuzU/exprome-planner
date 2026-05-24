@@ -8,7 +8,7 @@
 
   export let character: CharacterState;
   export let label: string;
-  export const editable: boolean = true;
+  export let editable: boolean = true;
   export let praetorianId: string | null;
 
   $: classDef = classById(character.classId);
@@ -27,6 +27,34 @@
 
   function onFocusSkill(e: CustomEvent<string>) {
     focusedSkillId = e.detail;
+  }
+
+  let editingName = false;
+  let nameDraft = character.name;
+  $: if (!editingName) nameDraft = character.name;
+
+  function startEditName() {
+    if (!editable) return;
+    nameDraft = character.name;
+    editingName = true;
+  }
+  function commitName() {
+    const v = nameDraft.trim();
+    if (v && v !== character.name) {
+      updateActiveBuild((b) => {
+        if (praetorianId) {
+          const p = b.praetorians.find((x) => x.id === praetorianId);
+          if (p) p.name = v;
+        } else {
+          // PC path: editable + no praetorianId.
+          b.pc.name = v;
+        }
+      });
+    }
+    editingName = false;
+  }
+  function cancelName() {
+    editingName = false;
   }
 
   // Locate this character in the active build and reset their skill ranks.
@@ -56,7 +84,25 @@
   <header class="sheet-head">
     <div class="who">
       <span class="label">{label}</span>
-      <span class="name">{character.name}</span>
+      {#if editingName}
+        <input
+          class="name-edit"
+          bind:value={nameDraft}
+          on:blur={commitName}
+          on:keydown={(e) => {
+            if (e.key === 'Enter') commitName();
+            else if (e.key === 'Escape') cancelName();
+          }}
+          autofocus
+        />
+      {:else}
+        <span class="name" class:can-edit={editable} on:click={startEditName} role="presentation">
+          {character.name}
+        </span>
+        {#if editable}
+          <button class="name-edit-btn" on:click={startEditName} title="Rename">✎</button>
+        {/if}
+      {/if}
       <span class="cls">{classDef?.name ?? character.classId}</span>
     </div>
     <div class="counter">
@@ -127,6 +173,34 @@
     color: var(--gold-bright);
     font-variant: small-caps;
     letter-spacing: 0.04em;
+  }
+  .name.can-edit {
+    cursor: text;
+    border-bottom: 1px dashed transparent;
+  }
+  .name.can-edit:hover {
+    border-bottom-color: var(--bronze);
+  }
+  .name-edit {
+    font-size: 1.4rem;
+    color: var(--gold-bright);
+    font-variant: small-caps;
+    letter-spacing: 0.04em;
+    background: var(--bg);
+    border: 1px solid var(--gold);
+    padding: 0 6px;
+    min-width: 8em;
+  }
+  .name-edit-btn {
+    font-size: 0.85rem;
+    padding: 2px 8px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-faint);
+  }
+  .name-edit-btn:hover {
+    color: var(--gold-bright);
+    border-color: var(--gold);
   }
   .cls {
     font-size: 0.95rem;
