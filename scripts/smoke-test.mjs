@@ -37,6 +37,12 @@ console.log(`First click: ${before} -> ${after}`);
 
 await page.screenshot({ path: resolve(OUT, 'desktop-princeps.png'), fullPage: true });
 
+// Hover over a cell to capture the custom tooltip.
+const secondCell = page.locator('.cell').nth(2);
+await secondCell.hover();
+await page.waitForTimeout(250);
+await page.screenshot({ path: resolve(OUT, 'desktop-tooltip.png'), fullPage: false });
+
 // Mobile viewport.
 await page.setViewportSize({ width: 420, height: 850 });
 await page.waitForTimeout(200);

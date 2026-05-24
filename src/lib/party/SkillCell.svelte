@@ -74,15 +74,9 @@
     }
   }
 
-  $: tipLines = [
-    skill.name,
-    `${rank} / ${skill.maxRank}`,
-    skill.description,
-    !tierUnlocked ? '\nLocked: ' + (inc.reason ?? '') : '',
-    rank === 0 && inc.reason ? `\n${inc.reason}` : '',
-  ]
-    .filter(Boolean)
-    .join('\n');
+  $: lockReason = !tierUnlocked && inc.reason ? inc.reason : '';
+  $: refundReason = rank > 0 && !dec.ok ? dec.reason : '';
+  $: capReason = rank < skill.maxRank && tierUnlocked && !inc.ok ? inc.reason : '';
 </script>
 
 <button
@@ -96,7 +90,6 @@
   on:click={onClick}
   on:contextmenu={onContext}
   on:dblclick={(e) => e.preventDefault()}
-  title={tipLines}
   aria-label="{skill.name}, rank {rank} of {skill.maxRank}"
   type="button"
 >
@@ -108,6 +101,21 @@
       🔒
     {/if}
   </span>
+
+  <!-- Custom desktop tooltip: appears ~80ms after hover, much faster than the
+       native title attribute. Hidden on coarse-pointer devices (mobile uses
+       the tap-card pattern instead). -->
+  <div class="tip" role="tooltip">
+    <div class="tip-head">
+      <strong>{skill.name}</strong>
+      <span class="tip-rank">{rank} / {skill.maxRank}</span>
+    </div>
+    <div class="tip-meta">{skill.kind === 'active' ? 'Active' : 'Passive'} · Tier {skill.row}</div>
+    <p class="tip-desc">{skill.description}</p>
+    {#if lockReason}<div class="tip-warn">{lockReason}</div>{/if}
+    {#if capReason}<div class="tip-warn">{capReason}</div>{/if}
+    {#if refundReason}<div class="tip-warn">Shift+click to refund — but: {refundReason}</div>{/if}
+  </div>
 </button>
 
 <style>
@@ -179,5 +187,88 @@
     0%, 100% { transform: translateX(0); }
     25% { transform: translateX(-3px); border-color: var(--crimson); }
     75% { transform: translateX(3px); border-color: var(--crimson); }
+  }
+
+  /* Custom tooltip — fast appearance on hover (80ms), no flicker on quick
+     mouse movement between cells. Suppressed on touch via @media. */
+  .tip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 280px;
+    max-width: 92vw;
+    padding: 0.6rem 0.75rem;
+    background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.55);
+    text-align: left;
+    z-index: 30;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 80ms ease 80ms, visibility 0s linear 160ms;
+  }
+  .tip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--gold);
+  }
+  .cell:hover .tip,
+  .cell:focus-visible .tip {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 80ms ease 80ms, visibility 0s linear 80ms;
+  }
+  .tip-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-bottom: 0.2rem;
+  }
+  .tip-head strong {
+    color: var(--gold-bright);
+    font-variant: small-caps;
+    letter-spacing: 0.04em;
+    font-size: 0.98rem;
+  }
+  .tip-rank {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    font-variant-numeric: tabular-nums;
+  }
+  .tip-meta {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    font-variant: small-caps;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.4rem;
+  }
+  .tip-desc {
+    margin: 0;
+    font-family: 'Georgia', serif;
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+  .tip-warn {
+    margin-top: 0.4rem;
+    padding-top: 0.4rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.78rem;
+    color: var(--crimson-bright);
+  }
+
+  /* Touch / coarse pointer: suppress hover tooltip — detail card takes over. */
+  @media (pointer: coarse) {
+    .tip {
+      display: none;
+    }
   }
 </style>
