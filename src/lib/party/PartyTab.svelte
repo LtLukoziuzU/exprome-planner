@@ -20,10 +20,7 @@
   $: selectedLabel = (() => {
     if (!build) return '';
     if (selected.kind === 'pc') return 'Player Character';
-    if (selected.kind === 'loyal') {
-      const l = loyalRoster.find((x) => x.id === selected.id);
-      return l ? `${l.name} (Loyal)` : 'Loyal';
-    }
+    if (selected.kind === 'loyal') return 'Loyal';
     return 'Praetorian';
   })();
 
