@@ -48,6 +48,24 @@ await page.setViewportSize({ width: 420, height: 850 });
 await page.waitForTimeout(200);
 await page.screenshot({ path: resolve(OUT, 'mobile-princeps.png'), fullPage: true });
 
+// Back to desktop, switch to Outpost tab.
+await page.setViewportSize({ width: 1400, height: 900 });
+await page.getByRole('button', { name: 'Outpost' }).click();
+await page.waitForTimeout(300);
+await page.screenshot({ path: resolve(OUT, 'desktop-outpost-empty.png'), fullPage: true });
+
+// Plan node 1 (Speculator Tent — first child of R1, always buildable).
+const node1 = page.locator('[aria-label="Speculator Tent"]').first();
+await node1.click();
+await page.waitForTimeout(150);
+const status1 = await node1.locator('circle').getAttribute('class');
+console.log('After 1st click on Speculator Tent — circle classes:', status1);
+
+// Click again to mark owned.
+await node1.click();
+await page.waitForTimeout(150);
+await page.screenshot({ path: resolve(OUT, 'desktop-outpost-planned.png'), fullPage: true });
+
 console.log(`Console errors: ${errors.length ? errors.join('\n  ') : 'none'}`);
 console.log(`Screenshots written to ${OUT}`);
 

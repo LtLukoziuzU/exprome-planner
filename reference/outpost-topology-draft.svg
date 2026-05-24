@@ -1,0 +1,105 @@
+<!-- viewBox matches 06-outpost-tree-full.png (2000×1125) so a render at the
+     same size composites pixel-aligned with the screenshot. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 1125" font-family="sans-serif">
+  <style>
+    .root { fill: #a02736; stroke: #d6a85a; stroke-width: 4; }
+    .root-2 { fill: #5a4f3a; stroke: #d6a85a; stroke-width: 4; }
+    .root-3 { fill: #6b5630; stroke: #d6a85a; stroke-width: 4; }
+    .node { fill: rgba(20,34,62,0.85); stroke: #ecc680; stroke-width: 3; }
+    .edge { stroke: #ecc680; stroke-width: 3; fill: none; opacity: 0.85; }
+    .lbl { fill: #ecc680; font-size: 26px; text-anchor: middle; font-weight: bold; font-family: Georgia, serif; }
+    .rlbl { fill: #ecc680; font-size: 24px; text-anchor: middle; font-weight: bold; font-family: Georgia, serif; }
+  </style>
+
+  <!-- spine connecting the three roots -->
+  <line class="edge" x1="130" y1="295" x2="130" y2="835"/>
+
+  <!-- ROOTS -->
+  <circle class="root"   cx="130" cy="295" r="40"/><text class="rlbl" x="130" y="305">R1</text>
+  <circle class="root-2" cx="130" cy="555" r="40"/><text class="rlbl" x="130" y="565">R2</text>
+  <circle class="root-3" cx="130" cy="835" r="40"/><text class="rlbl" x="130" y="845">R3</text>
+
+  <!-- ==================== TOP HALF (from R1) ==================== -->
+  <line class="edge" x1="170" y1="295" x2="220" y2="295"/>
+  <circle class="node" cx="250" cy="295" r="32"/><text class="lbl" x="250" y="305">1</text>
+
+  <!-- Top-left cluster: row1 has 3 (2,3,4), row2 has 2 (5,6) -->
+  <line class="edge" x1="282" y1="295" x2="430" y2="200"/>
+  <line class="edge" x1="282" y1="295" x2="430" y2="395"/>
+  <circle class="node" cx="430" cy="200" r="32"/><text class="lbl" x="430" y="210">2</text>
+  <circle class="node" cx="555" cy="200" r="32"/><text class="lbl" x="555" y="210">3</text>
+  <circle class="node" cx="680" cy="200" r="32"/><text class="lbl" x="680" y="210">4</text>
+  <circle class="node" cx="430" cy="395" r="32"/><text class="lbl" x="430" y="405">5</text>
+  <circle class="node" cx="555" cy="395" r="32"/><text class="lbl" x="555" y="405">6</text>
+  <line class="edge" x1="462" y1="200" x2="523" y2="200"/>
+  <line class="edge" x1="587" y1="200" x2="648" y2="200"/>
+  <line class="edge" x1="462" y1="395" x2="523" y2="395"/>
+  <line class="edge" x1="430" y1="232" x2="430" y2="363"/>
+  <line class="edge" x1="555" y1="232" x2="555" y2="363"/>
+
+  <!-- Central junction node 7 (single, merged from former 7+20) -->
+  <circle class="node" cx="700" cy="555" r="32"/><text class="lbl" x="700" y="565">7</text>
+  <!-- Top-half inputs to 7 -->
+  <line class="edge" x1="680" y1="232" x2="700" y2="523"/>
+  <line class="edge" x1="587" y1="395" x2="700" y2="523"/>
+
+  <!-- Top-right cluster: row1 has 2 (8,9), row2 has 3 (10,11,12) -->
+  <circle class="node" cx="940" cy="200" r="32"/><text class="lbl" x="940" y="210">8</text>
+  <circle class="node" cx="1065" cy="200" r="32"/><text class="lbl" x="1065" y="210">9</text>
+  <circle class="node" cx="820" cy="395" r="32"/><text class="lbl" x="820" y="405">10</text>
+  <circle class="node" cx="945" cy="395" r="32"/><text class="lbl" x="945" y="405">11</text>
+  <circle class="node" cx="1070" cy="395" r="32"/><text class="lbl" x="1070" y="405">12</text>
+  <line class="edge" x1="972" y1="200" x2="1033" y2="200"/>
+  <line class="edge" x1="852" y1="395" x2="913" y2="395"/>
+  <line class="edge" x1="977" y1="395" x2="1038" y2="395"/>
+  <line class="edge" x1="940" y1="232" x2="945" y2="363"/>
+  <line class="edge" x1="1065" y1="232" x2="1070" y2="363"/>
+  <!-- 7 -> 10 (top-right input) -->
+  <line class="edge" x1="725" y1="538" x2="788" y2="395"/>
+
+  <!-- Right edge bridge node 13 -->
+  <circle class="node" cx="1190" cy="555" r="32"/><text class="lbl" x="1190" y="565">13</text>
+  <line class="edge" x1="1090" y1="425" x2="1175" y2="525"/>
+
+  <!-- ==================== BOTTOM HALF (from R3) ==================== -->
+  <line class="edge" x1="170" y1="835" x2="220" y2="835"/>
+  <circle class="node" cx="250" cy="835" r="32"/><text class="lbl" x="250" y="845">14</text>
+
+  <!-- Bottom-left cluster: row1 (top) has 2 (15,16), row2 (bottom) has 3 (17,18,19) -->
+  <line class="edge" x1="282" y1="835" x2="430" y2="730"/>
+  <line class="edge" x1="282" y1="835" x2="430" y2="925"/>
+  <circle class="node" cx="430" cy="730" r="32"/><text class="lbl" x="430" y="740">15</text>
+  <circle class="node" cx="555" cy="730" r="32"/><text class="lbl" x="555" y="740">16</text>
+  <circle class="node" cx="430" cy="925" r="32"/><text class="lbl" x="430" y="935">17</text>
+  <circle class="node" cx="555" cy="925" r="32"/><text class="lbl" x="555" y="935">18</text>
+  <circle class="node" cx="680" cy="925" r="32"/><text class="lbl" x="680" y="935">19</text>
+  <line class="edge" x1="462" y1="730" x2="523" y2="730"/>
+  <line class="edge" x1="462" y1="925" x2="523" y2="925"/>
+  <line class="edge" x1="587" y1="925" x2="648" y2="925"/>
+  <line class="edge" x1="430" y1="762" x2="430" y2="893"/>
+  <line class="edge" x1="555" y1="762" x2="555" y2="893"/>
+
+  <!-- Bottom-half inputs to central 7 -->
+  <line class="edge" x1="587" y1="730" x2="700" y2="587"/>
+  <line class="edge" x1="680" y1="893" x2="700" y2="587"/>
+
+  <!-- Bottom-right cluster: row1 (top) has 3 (21,22,23), row2 (bottom) has 2 (24, 20-new) -->
+  <circle class="node" cx="820" cy="730" r="32"/><text class="lbl" x="820" y="740">21</text>
+  <circle class="node" cx="945" cy="730" r="32"/><text class="lbl" x="945" y="740">22</text>
+  <circle class="node" cx="1070" cy="730" r="32"/><text class="lbl" x="1070" y="740">23</text>
+  <circle class="node" cx="945" cy="925" r="32"/><text class="lbl" x="945" y="935">24</text>
+  <!-- NEW node 20: bottom-right corner of bottom-right cluster — mirror of node 9 -->
+  <circle class="node" cx="1070" cy="925" r="32"/><text class="lbl" x="1070" y="935">20</text>
+
+  <line class="edge" x1="852" y1="730" x2="913" y2="730"/>
+  <line class="edge" x1="977" y1="730" x2="1038" y2="730"/>
+  <line class="edge" x1="945" y1="762" x2="945" y2="893"/>
+  <!-- New node 20 edges: vertical to 23 (above), horizontal to 24 (left) -->
+  <line class="edge" x1="1070" y1="762" x2="1070" y2="893"/>
+  <line class="edge" x1="977" y1="925" x2="1038" y2="925"/>
+
+  <!-- 7 -> 21 (bottom-right input) -->
+  <line class="edge" x1="725" y1="572" x2="788" y2="730"/>
+  <!-- 13 -> 23 (right-edge to bottom-right cluster) -->
+  <line class="edge" x1="1175" y1="585" x2="1090" y2="700"/>
+</svg>

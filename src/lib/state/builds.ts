@@ -45,7 +45,15 @@ export const makeBuild = (name: string): PartyBuild => {
     pc: makeCharacter('princeps', 'Player'),
     loyals: makeLoyalsMap(),
     praetorians: [],
+    outpost: { status: {} },
   };
+};
+
+// Migrate any pre-outpost builds loaded from storage so they have the field.
+const ensureOutpost = (b: PartyBuild): void => {
+  if (!b.outpost) {
+    b.outpost = { status: {} };
+  }
 };
 
 const load = (): StoredState => {
@@ -67,6 +75,7 @@ const persist = (state: StoredState): void => {
 };
 
 const initial = load();
+for (const b of initial.builds) ensureOutpost(b);
 if (initial.builds.length === 0) {
   const first = makeBuild('My Party');
   initial.builds.push(first);

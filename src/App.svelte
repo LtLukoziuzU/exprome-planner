@@ -1,6 +1,7 @@
 <script lang="ts">
   import { activeBuild, builds, setActiveBuild, createBuild, renameBuild, duplicateBuild, deleteBuild } from './lib/state/builds';
   import PartyTab from './lib/party/PartyTab.svelte';
+  import OutpostTab from './lib/outpost/OutpostTab.svelte';
 
   type Tab = 'party' | 'outpost';
   let activeTab: Tab = 'party';
@@ -78,10 +79,7 @@
   {#if activeTab === 'party'}
     <PartyTab />
   {:else}
-    <section class="placeholder">
-      <h2 class="flourish">Outpost</h2>
-      <p>The outpost planner will go here once the upgrade tree data is in.</p>
-    </section>
+    <OutpostTab />
   {/if}
 </main>
 
@@ -158,31 +156,16 @@
   }
 
   .app-main {
-    padding: 1rem 1.5rem 5rem;
+    padding: 1rem 1.5rem 1.5rem;
     min-height: calc(100vh - 110px);
   }
 
-  .placeholder {
-    max-width: 50em;
-    margin: 4rem auto;
-    text-align: center;
-    color: var(--text-dim);
-  }
-  .placeholder h2 {
-    font-size: 2rem;
-  }
-
   .app-footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 0.5rem 1.5rem;
+    padding: 0.75rem 1.5rem 1rem;
     font-size: 0.78rem;
     color: var(--text-faint);
-    background: rgba(15, 26, 46, 0.92);
+    background: rgba(15, 26, 46, 0.6);
     border-top: 1px solid var(--border);
-    backdrop-filter: blur(4px);
   }
   .app-footer a {
     color: var(--gold);

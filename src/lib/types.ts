@@ -48,7 +48,49 @@ export interface PartyBuild {
   pc: CharacterState;
   loyals: Record<string, CharacterState>;
   praetorians: PraetorianState[];
+  outpost: OutpostState;
 }
 
 export const SKILL_POINT_BUDGET = 20;
 export const TIER_THRESHOLDS = { 2: 1, 3: 4, 4: 7 } as const;
+
+// ─── Outpost ─────────────────────────────────────────────────────────────
+
+export type ResourceId = 'lumber' | 'food' | 'leather' | 'iron';
+export type ResourceCost = Partial<Record<ResourceId, number>>;
+export type NodeStatus = 'none' | 'planned' | 'owned';
+
+export interface OutpostNode {
+  id: string;
+  isRoot: boolean;
+  name: string;
+  description: string;
+  group: string;
+  tier: 1 | 2 | 3;
+  unlockedBy: string[];   // OR semantics: any one parent built unlocks this
+  cost: ResourceCost;
+  x: number;
+  y: number;
+}
+
+export interface OutpostGroup {
+  name: string;
+  icon: string;
+}
+
+export interface OutpostResource {
+  name: string;
+}
+
+export interface OutpostData {
+  resources: Record<ResourceId, OutpostResource>;
+  groups: Record<string, OutpostGroup>;
+  nodes: OutpostNode[];
+}
+
+export interface OutpostState {
+  /** Per-node status. Missing keys are treated as 'none'. */
+  status: Record<string, NodeStatus>;
+}
+
+export const RESOURCE_ORDER: ResourceId[] = ['lumber', 'food', 'leather', 'iron'];

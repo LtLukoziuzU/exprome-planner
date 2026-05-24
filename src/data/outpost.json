@@ -1,0 +1,50 @@
+{
+  "resources": {
+    "lumber":  { "name": "Lumber Mill" },
+    "food":    { "name": "Farm" },
+    "leather": { "name": "Tannery" },
+    "iron":    { "name": "Iron Mine" }
+  },
+  "groups": {
+    "medical":     { "name": "Medical",        "icon": "+" },
+    "market":      { "name": "Market",         "icon": "$" },
+    "recruitment": { "name": "Recruitment",    "icon": "T" },
+    "tactical":    { "name": "Tactical Items", "icon": "*" },
+    "blacksmith":  { "name": "Blacksmith",     "icon": "^" },
+    "morale":      { "name": "Morale",         "icon": "~" },
+    "defence":     { "name": "Defence",        "icon": "#" },
+    "stratagems":  { "name": "Stratagems",     "icon": "C" },
+    "offence":     { "name": "Offence",        "icon": "S" }
+  },
+  "nodes": [
+    { "id": "R1", "isRoot": true, "name": "Dispensary",       "group": "medical",     "tier": 1, "unlockedBy": [],               "cost": {},                                                  "x": 130,  "y": 295, "description": "Leave injured Praetorians here to treat them for free. Critical injuries can only be treated in the dispensary. Upgrade to decrease treatment time." },
+    { "id": "R2", "isRoot": true, "name": "Market",           "group": "market",      "tier": 1, "unlockedBy": [],               "cost": {},                                                  "x": 130,  "y": 555, "description": "Trade resources for other resources. Upgrade to unlock a wider variety of wares and gain better exchange rates." },
+    { "id": "R3", "isRoot": true, "name": "Barracks",         "group": "recruitment", "tier": 1, "unlockedBy": [],               "cost": {},                                                  "x": 130,  "y": 835, "description": "Leave a Praetorian here to refresh the available recruits. Available recruits will be between level 1 and 6. Upgrade to increase the level of the recruits to 7-12." },
+
+    { "id": "1",  "isRoot": false, "name": "Speculator Tent", "group": "tactical",    "tier": 1, "unlockedBy": ["R1"],           "cost": { "leather": 1, "lumber": 1 },                       "x": 250,  "y": 295, "description": "Leave a Praetorian here to replenish your tactical items. Upgrade to increase the number of refreshes per assignment." },
+    { "id": "2",  "isRoot": false, "name": "Bath",            "group": "morale",      "tier": 1, "unlockedBy": ["1"],            "cost": { "food": 1 },                                       "x": 430,  "y": 200, "description": "Leave a Praetorian here to boost their Approval up to Disgruntled if it has dropped below that level. Upgrade to raise the threshold to Hesitant." },
+    { "id": "3",  "isRoot": false, "name": "Depot",           "group": "offence",     "tier": 2, "unlockedBy": ["2"],            "cost": { "food": 1, "leather": 1 },                         "x": 555,  "y": 200, "description": "Increases the legion's strength when conquering new regions by 10%. Upgrade to increase the strength bonus to 15%." },
+    { "id": "4",  "isRoot": false, "name": "Balneum",         "group": "morale",      "tier": 2, "unlockedBy": ["3", "6"],       "cost": { "food": 1, "iron": 1 },                            "x": 680,  "y": 200, "description": "Leave a Praetorian here to boost their Approval up to Hesitant if it has dropped below that level. Upgrade to raise to Indifferent." },
+    { "id": "5",  "isRoot": false, "name": "Palisades",       "group": "defence",     "tier": 1, "unlockedBy": ["1"],            "cost": { "lumber": 1 },                                     "x": 430,  "y": 395, "description": "Increases the legion's strength when the outpost is attacked by 5%. Upgrade to increase the strength bonus to 10%." },
+    { "id": "6",  "isRoot": false, "name": "Infirmary",       "group": "medical",     "tier": 2, "unlockedBy": ["5"],            "cost": { "food": 1, "leather": 2 },                         "x": 555,  "y": 395, "description": "Leave injured Praetorians here to treat them for free. Critical injuries can only be treated in the infirmary. Upgrade to decrease treatment time." },
+    { "id": "7",  "isRoot": false, "name": "Legatus Tent",    "group": "tactical",    "tier": 2, "unlockedBy": ["6", "16"],      "cost": { "leather": 1, "lumber": 2 },                       "x": 700,  "y": 555, "description": "Leave a Praetorian here to replenish your tactical items. Upgrade to increase the number of refreshes per assignment." },
+    { "id": "8",  "isRoot": false, "name": "Imperator Tent",  "group": "tactical",    "tier": 3, "unlockedBy": ["10"],           "cost": { "food": 1, "leather": 1, "lumber": 2 },            "x": 940,  "y": 200, "description": "Leave a Praetorian here to replenish your tactical items." },
+    { "id": "9",  "isRoot": false, "name": "Storehouse",      "group": "offence",     "tier": 3, "unlockedBy": ["8"],            "cost": { "food": 2, "iron": 1 },                            "x": 1065, "y": 200, "description": "Increases the legion's strength when conquering new regions by 15%." },
+    { "id": "10", "isRoot": false, "name": "Factory",         "group": "stratagems",  "tier": 2, "unlockedBy": ["4", "7"],       "cost": { "iron": 1, "leather": 1, "lumber": 1 },            "x": 820,  "y": 395, "description": "Leave a Praetorian here to unlock level 2 battle stratagem upgrades or craft one-use stratagems. Upgrade to unlock level 3 stratagems." },
+    { "id": "11", "isRoot": false, "name": "Stone Walls",     "group": "defence",     "tier": 3, "unlockedBy": ["10"],           "cost": { "iron": 1, "lumber": 2 },                          "x": 945,  "y": 395, "description": "Increases the legion's strength when the outpost is attacked by 15%." },
+    { "id": "12", "isRoot": false, "name": "Commercium",      "group": "market",      "tier": 3, "unlockedBy": ["11"],           "cost": { "food": 2, "iron": 1, "leather": 1 },              "x": 1070, "y": 395, "description": "Trade resources for other resources." },
+    { "id": "13", "isRoot": false, "name": "Foundry",         "group": "blacksmith",  "tier": 3, "unlockedBy": ["9", "12", "20", "23"], "cost": { "food": 1, "iron": 2, "lumber": 1 },         "x": 1190, "y": 555, "description": "Leave a Praetorian to craft Praetorian items up to tier 3." },
+
+    { "id": "14", "isRoot": false, "name": "Armoury",         "group": "blacksmith",  "tier": 1, "unlockedBy": ["R3"],           "cost": { "iron": 1, "leather": 1 },                         "x": 250,  "y": 835, "description": "Leave a Praetorian to craft Praetorian items of tier 1. Upgrade to unlock tier 2 items." },
+    { "id": "15", "isRoot": false, "name": "Workshop",        "group": "stratagems",  "tier": 1, "unlockedBy": ["14"],           "cost": { "iron": 1, "lumber": 1 },                          "x": 430,  "y": 730, "description": "Leave a Praetorian here to unlock new level 1 battle stratagems or craft one-use stratagems. Upgrade to unlock level 2 stratagems." },
+    { "id": "16", "isRoot": false, "name": "Garrison",        "group": "recruitment", "tier": 2, "unlockedBy": ["15"],           "cost": { "food": 1, "iron": 1, "lumber": 1 },               "x": 555,  "y": 730, "description": "Leave a Praetorian here to refresh the available recruits. Available recruits will be between level 7 and 12. Upgrade to increase the level of the recruits to 13-18." },
+    { "id": "17", "isRoot": false, "name": "Stockpile",       "group": "offence",     "tier": 1, "unlockedBy": ["14"],           "cost": { "food": 1 },                                       "x": 430,  "y": 925, "description": "Increases the legion's strength when conquering new regions by 5%. Upgrade to increase the strength bonus to 10%." },
+    { "id": "18", "isRoot": false, "name": "Emporium",        "group": "market",      "tier": 2, "unlockedBy": ["17"],           "cost": { "food": 2, "leather": 1 },                         "x": 555,  "y": 925, "description": "Trade resources for other resources. Upgrade to unlock a wider variety of wares and gain better exchange rates." },
+    { "id": "19", "isRoot": false, "name": "Walls",           "group": "defence",     "tier": 2, "unlockedBy": ["18"],           "cost": { "iron": 1, "lumber": 1 },                          "x": 680,  "y": 925, "description": "Increases the legion's strength when the outpost is attacked by 10%. Upgrade to increase the strength bonus to 15%." },
+    { "id": "20", "isRoot": false, "name": "Lavacrum",        "group": "morale",      "tier": 3, "unlockedBy": ["24"],           "cost": { "food": 1, "leather": 1, "lumber": 1 },            "x": 1070, "y": 925, "description": "Leave a Praetorian here to boost their Approval up to Indifferent if it has dropped below that level." },
+    { "id": "21", "isRoot": false, "name": "Forge",           "group": "blacksmith",  "tier": 2, "unlockedBy": ["7", "19"],      "cost": { "food": 1, "iron": 2 },                            "x": 820,  "y": 730, "description": "Leave a Praetorian to craft Praetorian items up to tier 2. Upgrade to unlock tier 3 items." },
+    { "id": "22", "isRoot": false, "name": "Hospital",        "group": "medical",     "tier": 3, "unlockedBy": ["21"],           "cost": { "food": 2, "leather": 2 },                         "x": 945,  "y": 730, "description": "Leave injured Praetorians here to treat them for free. Critical injuries can only be treated in the hospital." },
+    { "id": "23", "isRoot": false, "name": "Praetorium",      "group": "recruitment", "tier": 3, "unlockedBy": ["22"],           "cost": { "food": 2, "leather": 1, "lumber": 1 },            "x": 1070, "y": 730, "description": "Leave a Praetorian here to refresh the available recruits. Available recruits will be between level 13 and 18." },
+    { "id": "24", "isRoot": false, "name": "Arsenal",         "group": "stratagems",  "tier": 3, "unlockedBy": ["21"],           "cost": { "iron": 1, "leather": 1, "lumber": 2 },            "x": 945,  "y": 925, "description": "Leave a Praetorian here to unlock level 3 battle stratagem upgrades or craft one-use stratagems." }
+  ]
+}
