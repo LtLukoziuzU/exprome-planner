@@ -117,8 +117,14 @@ Verginia Assilia is the PC slot in the source screenshot — not a loyal.
 
 ### 3.3 Outpost data (`src/data/outpost.json`)
 
+Resource types (confirmed, left-to-right in the in-game top bar):
+1. **Lumber Mill** (`lumber`)
+2. **Farm** (`food`)
+3. **Tannery** (`leather`)
+4. **Iron Mine** (`iron`)
+
 ```ts
-type ResourceId = 'res1' | 'res2' | 'res3' | 'res4'; // names TBD
+type ResourceId = 'lumber' | 'food' | 'leather' | 'iron';
 
 interface OutpostNode {
   id: string;
